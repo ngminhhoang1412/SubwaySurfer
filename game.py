@@ -13,24 +13,36 @@ import tensorflow as tf
 from PIL import Image
 import random
 
-PATH_TO_GAME = 'C:\\Program Files\\WindowsApps\\' \
-               '16925JeuxjeuxjeuxGames.SubwaySurfersOriginalFree_1.0.0.0_x64__66k318ytnjhfe\\app\\app.exe'
+LDPLAYER_PATH = r"C:\LDPlayer\LDPlayer64\ldconsole.exe"
+ADB_PATH = r"C:\LDPlayer\LDPlayer64\adb.exe"
+INSTANCE_INDEX = 0
+ADB_PORT = 5555 + INSTANCE_INDEX
+ADB_TARGET = f"127.0.0.1:{ADB_PORT}"
+PACKAGE_NAME = "com.kiloo.subwaysurf"
+WAIT_TIME = 25
 
 GAME = {"top": 150, "left": 570, "width": 750, "height": 750}
 PAUSE = {"top": 10, "left": 15, "width": 60, "height": 60}
 PATH_TO_IMAGES = 'images\\training'
+os.makedirs(PATH_TO_IMAGES, exist_ok=True)
+subfolders = ['left', 'right', 'up', 'down', 'noop']
+
+for folder in subfolders:
+    path = os.path.join(PATH_TO_IMAGES, folder)
+    os.makedirs(path, exist_ok=True)
 
 frame_width = 750
 frame_height = 750
 frame_rate = 12.0
-VIDEO_PATH = "C:\\Users\\nikla\\PycharmProjects\\subwAI\\recordings\\"
+os.makedirs('recordings', exist_ok=True)
+VIDEO_PATH = "C:\\Users\\mjho1\\PycharmProjects\\SubwaySurfer\\recordings\\"
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 
 
 class Game:
     def __init__(self):
         print("Starting the Game Subway Surfers!")
-        subprocess.run(PATH_TO_GAME)
+        self.open_game()
 
         self.game_active = False
         self.all_zeros = False
@@ -349,3 +361,44 @@ class Game:
         m = self.mse(image_a, image_b)
         s = ssim(image_a, image_b)
         return m, s
+
+    @staticmethod
+    def run_cmd(cmd, capture=True):
+        print(f">>> {cmd}")
+        try:
+            result = subprocess.run(cmd, capture_output=capture, text=True, check=True)
+            if capture:
+                print(result.stdout)
+                if result.stderr:
+                    print("stderr:", result.stderr)
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Command failed: {e}")
+            if e.stdout:
+                print("stdout:", e.stdout)
+            if e.stderr:
+                print("stderr:", e.stderr)
+            raise
+
+    def open_game(self):
+        if not os.path.exists(LDPLAYER_PATH):
+            raise FileNotFoundError("ldconsole.exe not found!")
+        if not os.path.exists(ADB_PATH):
+            raise FileNotFoundError("adb.exe not found!")
+
+        # print("🚀 Launching LDPlayer...")
+        # self.run_cmd([LDPLAYER_PATH, "launch", "--index", str(INSTANCE_INDEX)])
+        # print(f"⏳ Waiting {WAIT_TIME} seconds for emulator to boot...")
+        # time.sleep(WAIT_TIME)
+
+        print(f"🔌 Connecting ADB to emulator at {ADB_TARGET}...")
+        self.run_cmd([ADB_PATH, "connect", ADB_TARGET])
+        print(f"📱 Launching app {PACKAGE_NAME}...")
+        self.run_cmd([
+            ADB_PATH, "-s", ADB_TARGET, "shell", "monkey",
+            "-p", PACKAGE_NAME,
+            "-c", "android.intent.category.LAUNCHER",
+            "1"
+        ])
+        # print("📖 Starting logcat (press Ctrl+C to stop)...")
+        # subprocess.run([ADB_PATH, "-s", ADB_TARGET, "logcat"])
+        # time.sleep(WAIT_TIME)

@@ -36,6 +36,10 @@ ACTIONS2IDX = {
     'down_flipped': 3,
     'noop_flipped': 4
 }
+os.makedirs('dataset_preloaded', exist_ok=True)
+os.makedirs('models', exist_ok=True)
+os.makedirs(os.path.join('models', 'Sequential'), exist_ok=True)
+
 
 
 def main():
@@ -66,7 +70,7 @@ def train_on_data():
     models = [tf.keras.models.Sequential()]
     accuracies = []
     for classifier in models:
-        filename = os.path.join('models', type(classifier).__name__)
+        filename = os.path.join('models', type(classifier).__name__, 'model.keras')
         if type(classifier).__name__ == 'Sequential':
             # Get a compiled neural network
             model = get_model()
@@ -168,7 +172,8 @@ def let_ai_play():
     game.disable_wifi()
     # [KNeighborsClassifier(n_neighbors=5), tf.keras.models.Sequential(), GaussianNB(), Perceptron()]
     model = tf.keras.models.Sequential()
-    path = os.path.join('models', type(model).__name__+'_whole_set')
+    # path = os.path.join('models', type(model).__name__+'_whole_set')
+    path = os.path.join('models', type(model).__name__, 'model.keras')
 
     if type(model).__name__ == 'Sequential':
         game.NN = True
@@ -261,6 +266,7 @@ def load_data():
         
         folders = ['down', 'down_flipped', 'up', 'up_flipped', 'left', 'right_flipped',
                    'right', 'left_flipped', 'noop', 'noop_flipped']
+        # folders = ['down', 'up', 'left', 'right', 'noop']
         
         min_images = len(os.listdir(os.path.join(PATH_TO_IMAGES, 'down')))*2
         

@@ -6,9 +6,10 @@ Script for flipping all training images horizontally in order to double the size
 Changes labels accordingly if necessary (left flipped -> right).
 """
 
-PATH_TO_IMAGES = 'images\\training2'
+PATH_TO_IMAGES = 'images\\training'
 images = []
 labels = []
+# os.makedirs(PATH_TO_IMAGES, exist_ok=True)
 
 total = 0
 for folder in os.listdir(PATH_TO_IMAGES):
