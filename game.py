@@ -21,7 +21,7 @@ ADB_TARGET = f"127.0.0.1:{ADB_PORT}"
 PACKAGE_NAME = "com.kiloo.subwaysurf"
 WAIT_TIME = 25
 
-GAME = {"top": 150, "left": 570, "width": 750, "height": 750}
+GAME = {"top": 0, "left": 0, "width": 720, "height": 1280}
 PAUSE = {"top": 10, "left": 15, "width": 60, "height": 60}
 PATH_TO_IMAGES = 'images\\training'
 os.makedirs(PATH_TO_IMAGES, exist_ok=True)
@@ -31,8 +31,8 @@ for folder in subfolders:
     path = os.path.join(PATH_TO_IMAGES, folder)
     os.makedirs(path, exist_ok=True)
 
-frame_width = 750
-frame_height = 750
+frame_width = 720
+frame_height = 1280
 frame_rate = 12.0
 os.makedirs('recordings', exist_ok=True)
 VIDEO_PATH = "C:\\Users\\mjho1\\PycharmProjects\\SubwaySurfer\\recordings\\"
@@ -85,14 +85,15 @@ class Game:
         time.sleep(5)
 
     def disable_wifi(self):
+        pass
         """
         Disable Wifi before playing to avoid ads.
         """
-        if input("Please disable WIFI and enter 'y': ") == 'y':
-            print("WIFI disabled")
-        else:
-            print("WIFI not disabled?")
-            self.disable_wifi()
+        # if input("Please disable WIFI and enter 'y': ") == 'y':
+        #     print("WIFI disabled")
+        # else:
+        #     print("WIFI not disabled?")
+        #     self.disable_wifi()
 
     def start_game(self):
         """
@@ -101,13 +102,13 @@ class Game:
         # self.disable_wifi()
         self.game_active = True
         pyautogui.moveTo(1, 1)
-        pyautogui.click(x=890, y=640)
+        pyautogui.click(x=360, y=540)
         self.game_counter += 1
         print(f"starting game {self.game_counter}!")
-        time.sleep(4)
-        pyautogui.click(1134, 943)
+        # time.sleep(4)
+        # pyautogui.click(1134, 943)
         time.sleep(2)
-        pyautogui.click(970, 640)
+        pyautogui.click(360, 540)
         self.out_name = VIDEO_PATH+time.strftime("%Y%m%d-%H%M%S")+'.avi'
         self.out = cv2.VideoWriter(self.out_name, fourcc, frame_rate, (frame_width, frame_height))
         self.game_start = time.time()
@@ -390,15 +391,16 @@ class Game:
         # print(f"⏳ Waiting {WAIT_TIME} seconds for emulator to boot...")
         # time.sleep(WAIT_TIME)
 
-        print(f"🔌 Connecting ADB to emulator at {ADB_TARGET}...")
-        self.run_cmd([ADB_PATH, "connect", ADB_TARGET])
-        print(f"📱 Launching app {PACKAGE_NAME}...")
-        self.run_cmd([
-            ADB_PATH, "-s", ADB_TARGET, "shell", "monkey",
-            "-p", PACKAGE_NAME,
-            "-c", "android.intent.category.LAUNCHER",
-            "1"
-        ])
+        # print(f"🔌 Connecting ADB to emulator at {ADB_TARGET}...")
+        # self.run_cmd([ADB_PATH, "connect", ADB_TARGET])
+        # print(f"📱 Launching app {PACKAGE_NAME}...")
+        # self.run_cmd([
+        #     ADB_PATH, "-s", ADB_TARGET, "shell", "monkey",
+        #     "-p", PACKAGE_NAME,
+        #     "-c", "android.intent.category.LAUNCHER",
+        #     "1"
+        # ])
+
         # print("📖 Starting logcat (press Ctrl+C to stop)...")
         # subprocess.run([ADB_PATH, "-s", ADB_TARGET, "logcat"])
         # time.sleep(WAIT_TIME)
