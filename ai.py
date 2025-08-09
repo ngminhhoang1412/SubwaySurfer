@@ -17,11 +17,9 @@ EPOCHS = 20
 if len(sys.argv) > 3:
     IMG_WIDTH = int(sys.argv[-1])
     IMG_HEIGHT = int(sys.argv[-1])
-    print(IMG_HEIGHT)
-    print(IMG_WIDTH)
 else:
-    IMG_WIDTH = 720
-    IMG_HEIGHT = 1080
+    IMG_WIDTH = 96
+    IMG_HEIGHT = 96
 NUM_CATEGORIES = 5
 TEST_SIZE = 0.3
 

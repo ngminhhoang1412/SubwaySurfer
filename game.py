@@ -21,7 +21,7 @@ ADB_TARGET = f"127.0.0.1:{ADB_PORT}"
 PACKAGE_NAME = "com.kiloo.subwaysurf"
 WAIT_TIME = 25
 
-GAME = {"top": 0, "left": 0, "width": 720, "height": 1280}
+GAME = {"top": 150, "left": 570, "width": 750, "height": 750}
 PAUSE = {"top": 10, "left": 15, "width": 60, "height": 60}
 PATH_TO_IMAGES = 'images\\training'
 os.makedirs(PATH_TO_IMAGES, exist_ok=True)
@@ -31,8 +31,8 @@ for folder in subfolders:
     path = os.path.join(PATH_TO_IMAGES, folder)
     os.makedirs(path, exist_ok=True)
 
-frame_width = 720
-frame_height = 1280
+frame_width = 750
+frame_height = 750
 frame_rate = 12.0
 os.makedirs('recordings', exist_ok=True)
 VIDEO_PATH = "C:\\Users\\mjho1\\PycharmProjects\\SubwaySurfer\\recordings\\"
